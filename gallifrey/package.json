@@ -1,0 +1,23 @@
+{
+  "name": "timelord",
+  "version": "0.0.0",
+  "description": "A time management tool.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HyveMynd/timelord.git"
+  },
+  "author": "HyveMynd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HyveMynd/timelord/issues"
+  },
+  "homepage": "https://github.com/HyveMynd/timelord",
+  "dependencies": {
+    "express": "^4.9.3",
+    "membership": "HyveMynd/kumoplay-membership"
+  }
+}
