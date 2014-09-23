@@ -1,31 +1,93 @@
 /**
  * Created by Andres Monroy (HyveMynd) on 9/22/14.
  */
-var toastrOptions = {
-    "closeButton": false,
-    "debug": false,
-    "positionClass": "toast-top-right",
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-};
 
-angular.module('gallifrey').value('Toastr', toastr);
-angular.module('gallifrey').
-    factory('ToasterService', ['Toastr', function (Toastr) {
-        return {
-            notify: function (msg) {
-                Toastr.options = toastrOptions;
-                Toastr.success(msg);
-            },
-            error: function (msg) {
-                Toastr.error(msg);
+
+var app = angular.module('gallifrey');
+
+app.value('Toastr', toastr);
+
+app.factory('ToasterService', ['Toastr', function (Toastr) {
+    var toastrOptions = {
+        "closeButton": false,
+        "debug": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    return {
+        notify: function (msg) {
+            Toastr.options = toastrOptions;
+            Toastr.success(msg);
+        },
+        error: function (msg) {
+            Toastr.error(msg);
+        }
+    }
+}]);
+
+app.factory('AuthService',
+    ['$http', 'ToasterService', '$location', '$window', function ($http, ToasterService, $location, $window) {
+        var currentUser = null;
+
+        function login(user){
+            $http.post('/auth/login', user).
+                success(function (data) {
+                    currentUser = data;
+                    $window.sessionStorage['currentUser'] = JSON.stringify(data);
+                    ToasterService.notify('Welcome!');
+                }).
+                error(function (data) {
+                    ToasterService.error(data.message);
+                });
+        }
+
+        function logout() {
+            $window.sessionStorage['currentUser'] = null;
+            currentUser = null;
+        }
+
+        function register(user) {
+            $http.post('/auth/register', user).
+                success(function (data) {
+                    currentUser = data;
+                    $window.sessionStorage['currentUser'] = JSON.stringify(data);
+                    ToasterService.notify('Welcome!');
+                    $location.path('/');
+                }).
+                error(function (data) {
+                    ToasterService.error(data.message);
+                });
+        }
+
+        function getCurrentUser(){
+            return currentUser;
+        }
+
+        function isLoggedIn(){
+            return currentUser !== null;
+        }
+
+        function init() {
+            if ($window.sessionStorage["currentUser"]) {
+                currentUser = JSON.parse($window.sessionStorage["currentUser"]);
             }
         }
-    }])
+        init();
+
+        return {
+            login: login,
+            logout: logout,
+            register: register,
+            isLoggedIn: isLoggedIn,
+            currentUser: getCurrentUser
+        }
+}]);
