@@ -1,0 +1,28 @@
+.row
+    .col-lg-6
+        form.form-horizontal(role="form", name="form" novalidate)
+            .form-group
+                label.col-sm-2.control-label First Name
+                .col-sm-10
+                    input.form-control(placeholder="First Name", required, autofocus="true", ng-model="newUser.firstName")
+            .form-group
+                label.col-sm-2.control-label Last Name
+                .col-sm-10
+                    input.form-control(placeholder="Last Name", required, ng-model="newUser.lastName")
+            .form-group
+                label.col-sm-2.control-label Email
+                .col-sm-10
+                    input.form-control(type="email", placeholder="Email", required, ng-model="newUser.email")
+            .form-group
+                label.col-sm-2.control-label Password
+                .col-sm-10
+                    input.form-control(type="password", placeholder="Password", required, ng-model="newUser.password")
+            .form-group
+                label.col-sm-2.control-label Confirm Password
+                .col-sm-10
+                    input.form-control(type="password", placeholder="Confirm Password", required, ng-model="newUser.confirm")
+            .form-group
+                .col-sm-offset-2.col-sm-10
+                    .btn-group
+                        button.btn.btn-success(ng-disabled="form.$invalid", ng-click="register(newUser)") Register
+                        button.btn.btn-danger(ng-click="reset()") Reset

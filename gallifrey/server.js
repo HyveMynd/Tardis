@@ -4,11 +4,33 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
+var Membership = require('kumoplay-membership');
+var membership = new Membership('membership');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var accountRoutes = require('./routes/account');
 var app = express();
+
+// Setup passport
+passport.use(new LocalStrategy(function (email, password, done) {
+    membership.authenticate(email, password, function (err, authResult) {
+        if (authResult.success){
+            done(null, authResult.user);
+        } else {
+            done(null, false, {message: authResult.message});
+        }
+    })
+}));
+passport.serializeUser(function (user, done) {
+    done(null, user.authenticationToken);
+});
+passport.deserializeUser(function (token, done) {
+    membership.findByUserToken(token, done);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,11 +42,19 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+    secret: 'Ultra Unicorn of Poxio',
+    saveUninitialized: true,
+    resave: true
+}));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 
+app.use('/api/users', users);
+app.use('/auth', accountRoutes);
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
