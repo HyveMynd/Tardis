@@ -7,7 +7,7 @@ var app = angular.module('gallifrey');
 
 app.value('Toastr', toastr);
 
-app.factory('ToasterService', ['Toastr', function (Toastr) {
+app.service('ToasterService', ['Toastr', function (Toastr) {
     var toastrOptions = {
         "closeButton": false,
         "debug": false,
@@ -116,3 +116,21 @@ app.service('Session', ['$window', function ($window) {
 
     return self;
 }]);
+
+app.factory('Basket', function() {
+    var items = [];
+    var myBasketService = {};
+
+    myBasketService.addItem = function(item) {
+        items.push(item);
+    };
+    myBasketService.removeItem = function(item) {
+        var index = items.indexOf(item);
+        items.splice(index, 1);
+    };
+    myBasketService.items = function() {
+        return items;
+    };
+
+    return myBasketService;
+});

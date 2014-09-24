@@ -6,17 +6,15 @@ nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation', ng-controller="Nav
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
-            a(href="/")
+            a(ng-click="homeClick()")
                 img.navbar-brand(src="/images/timelord_logo.png")
         .collapse.navbar-collapse
             ul.nav.navbar-nav
-                li(data-match-route="/")
-                    a(href='/') HOME
-                //li(data-match-route="/about")
-                //    a(href='/about') ABOUT
+                li(ng-if="currentUser")
+                    a(href='/admin') ADMIN
+                li(ng-if="currentUser")
+                    a(href="/hours") HOURS
             ul.nav.navbar-nav.navbar-right.padding-20-right(ng-if="!currentUser")
-                //li(data-match-route="/login")
-                //    a(href="/login") LOGIN
                 li(data-match-route="/register")
                     a(href="/register") REGISTER
             ul.nav.navbar-nav.navbar-right.padding-20-right(ng-if="currentUser")
@@ -27,11 +25,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation', ng-controller="Nav
                         span.caret
                     ul.dropdown-menu(role='menu')
                         li
-                            a(href='#') PROFILE
-                        li
-                            a(href='#') Another action
-                        li
-                            a(href='#') Something else here
+                            a(href='/profile') PROFILE
                         li.divider
                         li
-                            a(ng-click="logout()") Logout
+                            a(ng-click="logout()") LOGOUT

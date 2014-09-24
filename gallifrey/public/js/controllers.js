@@ -23,7 +23,7 @@ app.controller('LoginCtrl',
         $scope.login = function () {
             AuthService.login($scope.loginUser).then(function (user) {
                 $scope.setCurrentUser(user);
-                $location.path('/');
+                $location.path('/hours');
             })
         };
 }]);
@@ -37,16 +37,29 @@ app.controller('RegistrationCtrl',
         $scope.register = function () {
             AuthService.register($scope.newUser).then(function (user) {
                 $scope.setCurrentUser(user);
-                $location.path('/');
+                $location.path('/hours');
             })
         }
 }]);
 
 app.controller('NavbarCtrl',
-['$scope', 'AuthService', function ($scope, AuthService) {
+['$scope', 'AuthService', '$location', function ($scope, AuthService, $location) {
     $scope.logout = function () {
         AuthService.logout().then(function () {
             $scope.setCurrentUser(null);
+            $location.path('/');
         });
     };
+
+    $scope.homeClick = function () {
+        if (AuthService.isAuthenticated()){
+            $location.path('/hours')
+        } else {
+            $location.path('/');
+        }
+    };
+}]);
+
+app.controller('ProfileCtrl', [function () {
+
 }]);
