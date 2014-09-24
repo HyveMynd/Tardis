@@ -1,3 +1,11 @@
+$.backstretch([
+    "images/moon.png",
+    "images/earth.png",
+    "images/galaxy.png",
+    "images/shuttle.png",
+    "images/moon_walk.png"
+], {fade: "slow"});
+
 angular.module('gallifrey', ['ngResource', 'ngRoute', 'mgcrea.ngStrap'])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
