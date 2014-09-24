@@ -12,18 +12,18 @@ angular.module('gallifrey', ['ngResource', 'ngRoute', 'mgcrea.ngStrap'])
         $routeProvider.
             when('/', {
                 templateUrl: 'partials/home',
-                controller: 'loginCtrl'
+                controller: 'LoginCtrl'
             }).
             when('/about', {
                 templateUrl: 'partials/about'
             }).
             when('/login', {
                 templateUrl: 'partials/login',
-                controller: 'loginCtrl'
+                controller: 'LoginCtrl'
             }).
             when('/register', {
                 templateUrl: 'partials/register',
-                controller: 'registrationCtrl'
+                controller: 'RegistrationCtrl'
             }).
             otherwise({
                 redirectTo: '/'

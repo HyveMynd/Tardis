@@ -11,7 +11,7 @@ app.factory('ToasterService', ['Toastr', function (Toastr) {
     var toastrOptions = {
         "closeButton": false,
         "debug": false,
-        "positionClass": "toast-top-right",
+        "positionClass": "toast-bottom-right",
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
@@ -19,8 +19,8 @@ app.factory('ToasterService', ['Toastr', function (Toastr) {
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
+        "showMethod": "slideDown",
+        "hideMethod": "slideUp"
     };
 
     return {
@@ -35,74 +35,84 @@ app.factory('ToasterService', ['Toastr', function (Toastr) {
 }]);
 
 app.factory('AuthService',
-    ['$http', 'ToasterService', '$location', '$window', '$q', function ($http, ToasterService, $location, $window, $q) {
-        var currentUser = null;
-        var userDefer = $q.defer();
+    ['$http', 'ToasterService', '$q', 'Session', function ($http, ToasterService, $q, Session) {
 
         function login(user){
+            var defer = $q.defer();
             $http.post('/auth/login', user).
                 success(function (data) {
-                    currentUser = data;
-                    $window.sessionStorage['currentUser'] = JSON.stringify(data);
-                    ToasterService.notify('Welcome!');
-                    $location.path('/');
-                    userDefer.resolve(currentUser);
+                    ToasterService.notify('Welcome ' + data.firstName + " " + data.lastName + "!");
+                    Session.create(data);
+                    defer.resolve(data);
                 }).
                 error(function (data) {
                     ToasterService.error(data.message);
+                    defer.reject(data.message);
                 });
+            return defer.promise;
         }
 
         function logout() {
+            var defer = $q.defer();
             $http.post('auth/logout').
                 success(function () {
                     ToasterService.notify("Logged Out");
-                    $window.sessionStorage['currentUser'] = null;
-                    currentUser = null;
-                    $location.path('/');
+                    Session.destroy();
+                    defer.resolve();
                 }).
                 error(function (data) {
                     ToasterService.error(data);
+                    defer.reject(data);
                 });
+            return defer.promise;
         }
 
         function register(user) {
+            var defer = $q.defer();
             $http.post('/auth/register', user).
                 success(function (data) {
-                    currentUser = data;
-                    $window.sessionStorage['currentUser'] = JSON.stringify(data);
-                    ToasterService.notify('Welcome!');
-                    $location.path('/');
-                    userDefer.resolve(data);
+                    ToasterService.notify('Welcome ' + data.firstName + " " + data.lastName + "!");
+                    Session.create(data);
+                    defer.resolve(data);
                 }).
                 error(function (data) {
                     ToasterService.error(data.message);
+                    defer.reject();
                 });
+            return defer.promise;
         }
 
-        function getCurrentUser(){
-            return userDefer.promise;
+        function isAuthenticated(){
+            return !!Session.user;
         }
-
-        function isLoggedIn(){
-            return currentUser !== null;
-        }
-
-        function init() {
-            if ($window.sessionStorage["currentUser"]) {
-                currentUser = JSON.parse($window.sessionStorage["currentUser"]);
-                if (currentUser !== null){
-                    userDefer.resolve(currentUser);
-                }
-            }
-        }
-        init();
 
         return {
             login: login,
             logout: logout,
             register: register,
-            isLoggedIn: isLoggedIn,
-            getCurrentUser: getCurrentUser
+            isAuthenticated: isAuthenticated
         }
+}]);
+
+app.service('Session', ['$window', function ($window) {
+    var self = this;
+
+    self.create = function (session) {
+        $window.sessionStorage['currentUser'] = JSON.stringify(session);
+        self.user = session;
+    };
+
+    self.destroy = function () {
+        $window.sessionStorage['currentUser'] = null;
+        self.user = null;
+    };
+
+    function init() {
+        if ($window.sessionStorage["currentUser"]) {
+            self.user = JSON.parse($window.sessionStorage["currentUser"]);
+        }
+    }
+    init();
+
+    return self;
 }]);

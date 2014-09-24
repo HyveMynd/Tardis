@@ -4,33 +4,49 @@
 
 var app = angular.module('gallifrey');
 
-app.controller('loginCtrl',
-    ['$scope', 'AuthService', function ($scope, AuthService) {
+app.controller('AppCtrl', ['Session', '$scope', function (Session, $scope) {
+
+    if (Session.user){
+        $scope.currentUser = Session.user;
+    } else {
+        $scope.currentUser = null;
+    }
+
+    $scope.setCurrentUser = function (user) {
+        $scope.currentUser = user;
+    };
+
+}]);
+
+app.controller('LoginCtrl',
+    ['$scope', 'AuthService', '$location', function ($scope, AuthService, $location) {
         $scope.login = function () {
-            AuthService.login($scope.loginUser);
+            AuthService.login($scope.loginUser).then(function (user) {
+                $scope.setCurrentUser(user);
+                $location.path('/');
+            })
         };
 }]);
 
-app.controller('registrationCtrl',
-    ['$scope', 'AuthService', function ($scope, AuthService) {
+app.controller('RegistrationCtrl',
+    ['$scope', 'AuthService', '$location', function ($scope, AuthService, $location) {
         $scope.reset = function () {
             $scope.newUser = {};
             $scope.newUser.email = "";
         };
         $scope.register = function () {
-            var user = $scope.newUser;
-            AuthService.register(user);
+            AuthService.register($scope.newUser).then(function (user) {
+                $scope.setCurrentUser(user);
+                $location.path('/');
+            })
         }
 }]);
 
-app.controller('navbarCtrl',
+app.controller('NavbarCtrl',
 ['$scope', 'AuthService', function ($scope, AuthService) {
-    AuthService.getCurrentUser().then(function (user) {
-        $scope.currentUser = user;
-    });
     $scope.logout = function () {
-        AuthService.logout();
-        $scope.currentUser = null;
+        AuthService.logout().then(function () {
+            $scope.setCurrentUser(null);
+        });
     };
-
 }]);
