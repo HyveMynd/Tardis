@@ -1,8 +1,13 @@
+/*** Colors ***/
+pixioLightGrey = #E1EAE9
+pixioDarkGrey = #808282
+pixioBlue = #36A6DF
+gradientDarkBg = rgba(34,34,34,0.75)
+gradientDarkerBg = rgba(43, 43, 43, 0.75)
+
 body
   text-rendering: optimizelegibility
   padding-top : 70px
-  background: rgb(34,34,34); /* for IE */
-  background: rgba(34,34,34,0.75);
 
 h2
   text-align : center
@@ -11,8 +16,7 @@ h2
 
 .gradient-dark
   padding: 20px;
-  background: rgb(34,34,34); /* for IE */
-  background: rgba(34,34,34,0.75);
+  background: gradientDarkBg
 
 .navbar-brand
   padding : 12px
@@ -28,26 +32,34 @@ h2
   margin-right : 10px
 
 .form-control
-  border : 1px solid #2773b2
+  border : 1px solid pixioBlue
+
+input.form-control
+  color : #ffffff
+  font-family : roboThin
+  background-color : gradientDarkBg
 
 button
+  font-family : roboLight
   color: #ffffff
 
 label
+  font-family : roboLight
   color: #ffffff
 
+/**** Fonts ****/
 @font-face
   font-family: roboReg
   src: url(../fonts/Roboto-Regular.ttf)
-
 @font-face
   font-family: roboLight
   src: url(../fonts/Roboto-Light.ttf)
-
+@font-face
+  font-family: roboThin
+  src: url(../fonts/Roboto-Thin.ttf)
 @font-face
   font-family: roboBold
   src: url(../fonts/Roboto-Bold.ttf)
-
 @font-face
   font-family : bebas
   src: url(../fonts/BebasNeue.otf)

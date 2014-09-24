@@ -27,3 +27,8 @@ app.controller('registrationCtrl',
             AuthService.register(user);
         }
 }]);
+
+app.controller('navbarCtrl',
+['$scope', 'AuthService', function ($scope, AuthService) {
+    $scope.currentUser = AuthService.currentUser;
+}]);
