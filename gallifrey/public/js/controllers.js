@@ -4,16 +4,11 @@
 
 var app = angular.module('gallifrey');
 
-app.controller('homeCtrl', ['$scope', function ($scope) {
-    $scope.aVar = "WORKING!"
-}]);
-
 app.controller('loginCtrl',
     ['$scope', 'AuthService', function ($scope, AuthService) {
         $scope.login = function () {
             AuthService.login($scope.loginUser);
-        }
-        $scope.currentUser = AuthService.currentUser();
+        };
 }]);
 
 app.controller('registrationCtrl',
@@ -30,5 +25,12 @@ app.controller('registrationCtrl',
 
 app.controller('navbarCtrl',
 ['$scope', 'AuthService', function ($scope, AuthService) {
-    $scope.currentUser = AuthService.currentUser;
+    AuthService.getCurrentUser().then(function (user) {
+        $scope.currentUser = user;
+    });
+    $scope.logout = function () {
+        AuthService.logout();
+        $scope.currentUser = null;
+    };
+
 }]);

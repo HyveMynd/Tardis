@@ -4,7 +4,7 @@
 var passport = require('passport');
 var express = require('express');
 var router = express.Router();
-var Membership = require('kumoplay-membership');
+var Membership = require('user-module');
 
 var redirects = {
     successRedirect: "/",
@@ -28,7 +28,7 @@ router.post('/login', function (req, res, next) {
 router.post('/register', function (req, res, next) {
     var membership = new Membership('membership');
     var user = req.body;
-    membership.register(user.email, user.password, user.confirm, function (err, regResult) {
+    membership.register(user.email, user.password, user.confirm, user.firstName, user.lastName, function (err, regResult) {
         if (err){
             return next(err);
         }
@@ -42,6 +42,11 @@ router.post('/register', function (req, res, next) {
             return res.send(regResult.user);
         })
     })
+});
+
+router.post('/logout', function (req, res, next) {
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;

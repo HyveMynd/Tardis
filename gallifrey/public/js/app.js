@@ -12,7 +12,10 @@ angular.module('gallifrey', ['ngResource', 'ngRoute', 'mgcrea.ngStrap'])
         $routeProvider.
             when('/', {
                 templateUrl: 'partials/home',
-                controller: 'homeCtrl'
+                controller: 'loginCtrl'
+            }).
+            when('/about', {
+                templateUrl: 'partials/about'
             }).
             when('/login', {
                 templateUrl: 'partials/login',

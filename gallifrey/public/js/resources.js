@@ -35,8 +35,9 @@ app.factory('ToasterService', ['Toastr', function (Toastr) {
 }]);
 
 app.factory('AuthService',
-    ['$http', 'ToasterService', '$location', '$window', function ($http, ToasterService, $location, $window) {
+    ['$http', 'ToasterService', '$location', '$window', '$q', function ($http, ToasterService, $location, $window, $q) {
         var currentUser = null;
+        var userDefer = $q.defer();
 
         function login(user){
             $http.post('/auth/login', user).
@@ -44,6 +45,8 @@ app.factory('AuthService',
                     currentUser = data;
                     $window.sessionStorage['currentUser'] = JSON.stringify(data);
                     ToasterService.notify('Welcome!');
+                    $location.path('/');
+                    userDefer.resolve(currentUser);
                 }).
                 error(function (data) {
                     ToasterService.error(data.message);
@@ -51,8 +54,16 @@ app.factory('AuthService',
         }
 
         function logout() {
-            $window.sessionStorage['currentUser'] = null;
-            currentUser = null;
+            $http.post('auth/logout').
+                success(function () {
+                    ToasterService.notify("Logged Out");
+                    $window.sessionStorage['currentUser'] = null;
+                    currentUser = null;
+                    $location.path('/');
+                }).
+                error(function (data) {
+                    ToasterService.error(data);
+                });
         }
 
         function register(user) {
@@ -62,6 +73,7 @@ app.factory('AuthService',
                     $window.sessionStorage['currentUser'] = JSON.stringify(data);
                     ToasterService.notify('Welcome!');
                     $location.path('/');
+                    userDefer.resolve(data);
                 }).
                 error(function (data) {
                     ToasterService.error(data.message);
@@ -69,7 +81,7 @@ app.factory('AuthService',
         }
 
         function getCurrentUser(){
-            return currentUser;
+            return userDefer.promise;
         }
 
         function isLoggedIn(){
@@ -79,6 +91,9 @@ app.factory('AuthService',
         function init() {
             if ($window.sessionStorage["currentUser"]) {
                 currentUser = JSON.parse($window.sessionStorage["currentUser"]);
+                if (currentUser !== null){
+                    userDefer.resolve(currentUser);
+                }
             }
         }
         init();
@@ -88,6 +103,6 @@ app.factory('AuthService',
             logout: logout,
             register: register,
             isLoggedIn: isLoggedIn,
-            currentUser: getCurrentUser
+            getCurrentUser: getCurrentUser
         }
 }]);

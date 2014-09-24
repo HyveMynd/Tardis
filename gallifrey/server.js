@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var Membership = require('kumoplay-membership');
+var Membership = require('user-module');
 var membership = new Membership('membership');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
