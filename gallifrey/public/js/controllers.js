@@ -9,7 +9,7 @@ app.controller('AppCtrl', ['Session', '$scope', function (Session, $scope) {
     if (Session.user){
         $scope.currentUser = Session.user;
     } else {
-        $scope.currentUser = null;
+        $scope.currentUser = true; //todo change back to null when you want login to work
     }
 
     $scope.setCurrentUser = function (user) {

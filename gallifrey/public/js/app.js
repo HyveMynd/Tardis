@@ -33,7 +33,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         when('/', {
             templateUrl: 'partials/home',
             controller: 'LoginCtrl',
-            resolve: {home: homeRedirect}
+//            resolve: {home: homeRedirect}
         }).
         when('/about', {
             templateUrl: 'partials/about'
@@ -49,15 +49,15 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         when('/profile', {
             templateUrl: 'partials/profile',
             controller: 'ProfileCtrl',
-            resolve: { auth: authResolve }
+//            resolve: { auth: authResolve }
         }).
         when('/hours', {
             templateUrl: 'partials/hours',
-            resolve: {auth: authResolve}
+//            resolve: {auth: authResolve}
         }).
         when('/admin', {
             templateUrl: 'partials/admin',
-            resolve: {auth: authResolve}
+//            resolve: {auth: authResolve}
         }).
         otherwise({
             redirectTo: '/'
