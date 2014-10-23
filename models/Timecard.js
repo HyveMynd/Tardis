@@ -6,10 +6,12 @@ var assert = require('assert');
 
 var Timecard = function(args){
     var timecard = {};
-    assert.ok(args.timeIn && args.timeOut, 'Time in, time out, and user must be defined');
+    assert.ok(args.timeIn && args.timeOut && args.date && args.user, 'Time in, time out, date, and user must be defined');
 
     timecard.timeIn = args.timeIn;
     timecard.timeOut = args.timeOut;
+    timecard.date = args.date;
+    timecard.user = args.user;
 
     return timecard;
 };
