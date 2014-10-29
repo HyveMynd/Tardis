@@ -2,7 +2,7 @@
  * Created by Andres Monroy (HyveMynd) on 10/28/14.
  */
 var Oriento = require('oriento');
-var Registration = require('../lib/registration');
+var Registration = require('../lib/Registration');
 var should = require('should');
 
 var testUser = {

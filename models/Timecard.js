@@ -6,12 +6,12 @@ var assert = require('assert');
 
 var Timecard = function(args){
     var timecard = {};
-    assert.ok(args.timeIn && args.timeOut && args.date && args.user, 'Time in, time out, date, and user must be defined');
+    assert.ok(args.timeIn && args.timeOut && args.belongsTo, 'Time in, time out, date, and belongsTo must be defined');
 
+    timecard['@rid'] = args['@rid'] || null;
     timecard.timeIn = args.timeIn;
     timecard.timeOut = args.timeOut;
-    timecard.date = args.date;
-    timecard.user = args.user;
+    timecard.belongsTo = args.belongsTo;
 
     return timecard;
 };
