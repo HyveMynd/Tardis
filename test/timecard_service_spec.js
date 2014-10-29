@@ -40,15 +40,14 @@ describe("Timecard Service", function(){
 
     describe("register a timecard", function(){
         var tcResult = {};
-        var timeIn = new Date();
-        var timeOut = new Date();
 
         before(function (done) {
-            tcService.registerTimecard({timeIn: timeIn, timeOut: timeOut, user: user}, function (err, result) {
+            tcService.registerTimecard({timeIn: new Date(), timeOut: new Date(), user: user}, function (err, result) {
                 tcResult = result;
                 done();
             });
         });
+
         it("should be successful", function () {
             tcResult.success.should.be.true;
         });
@@ -66,6 +65,61 @@ describe("Timecard Service", function(){
         });
         it("belong to a user", function () {
             tcResult.timecard.belongsTo.should.be.defined;
+        });
+    });
+
+    describe("missing a user", function(){
+        var tcResult = {};
+
+        before(function (done) {
+            tcService.registerTimecard({timeIn: new Date(), timeOut: new Date()}, function (err, result) {
+                tcResult = result;
+                done();
+            });
+        });
+
+        it("should not be successful", function () {
+            tcResult.success.should.be.false;
+        });
+        it("has a message for a missing user", function () {
+            tcResult.message.should.equal('User must have an email.');
+        });
+    });
+
+    describe("missing timeIn or timeOut", function(){
+        var tcResult = {};
+
+        before(function (done) {
+            tcService.registerTimecard({timeIn: new Date(), user: user}, function (err, result) {
+                tcResult = result;
+                done();
+            });
+        });
+
+        it("should not be successful", function () {
+            tcResult.success.should.be.false;
+        });
+        it("has a message for a missing time", function () {
+            tcResult.message.should.equal('Must have a time in and time out');
+        });
+    });
+
+    describe("invalid user", function(){
+        var tcResult = {};
+
+        before(function (done) {
+            user.email = 'test2';
+            tcService.registerTimecard({timeIn: new Date(), timeOut: new Date(), user: user}, function (err, result) {
+                tcResult = result;
+                done();
+            });
+        });
+
+        it("should not be successful", function () {
+            tcResult.success.should.be.false;
+        });
+        it("has a message for a non-existent user", function () {
+            tcResult.message.should.equal('User must exist');
         });
     });
 

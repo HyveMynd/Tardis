@@ -1,17 +1,16 @@
 /**
- * Created by Andres Monroy (HyveMynd) on 10/28/14.
+ * Created by Andres Monroy (HyveMynd) on 10/29/14.
  */
 
-var Application = function(args){
+var ProjectApplication = function(args){
     var app = {};
 
-    app.firstname = args.firstname;
-    app.lastname = args.lastname;
-    app.email = args.email;
-    app.rate = args.rate;
-    app.status = "pending";
+    app.projectName = args.projectName;
+    app.startDate = args.startDate;
+    app.clientName = args.clientName;
+    app.status = 'pending';
     app.message = null;
-    app.user = null;
+    app.project = null;
 
     app.isValid = function () {
         return app.status === "valid";
@@ -33,4 +32,4 @@ var Application = function(args){
     return app;
 };
 
-module.exports = Application;
+module.exports = ProjectApplication;
