@@ -9,17 +9,17 @@ describe('User', function(){
         var user = {};
 
         before(function () {
-            user = new User({email: 'asd@asd.com', firstName: 'asd', lastName: 'dsa'});
+            user = new User({email: 'asd@asd.com', firstname: 'asd', lastname: 'dsa', rate: 1});
         });
 
         it('has an email', function () {
             user.email.should.equal('asd@asd.com');
         });
         it('has a first name', function () {
-            user.firstName.should.equal('asd');
+            user.firstname.should.equal('asd');
         });
         it('has a last name', function () {
-            user.lastName.should.equal('dsa');
+            user.lastname.should.equal('dsa');
         });
         it('has a defined rate', function () {
             user.rate.should.be.defined;
